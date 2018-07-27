@@ -16,7 +16,7 @@ router.get('/', (req, res, next) => {
 res.json(languages);
 });
 
-import userRouter from './routes/users'
-router.use(userRouter);
+import userViews from './views/users'
+router.use(userViews);
 
 export default router;
