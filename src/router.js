@@ -1,4 +1,5 @@
 import express from 'express';
+
 let router = express.Router();
 /* GET home page. */
 router.get('/', (req, res, next) => {
@@ -13,10 +14,15 @@ router.get('/', (req, res, next) => {
       language: "German"
     }
   ];
-res.json(languages);
+  res.json(languages);
 });
 
-import userViews from './views/users'
-router.use(userViews);
+import brandViews from './views/brands.js';
+import productViews from './views/products.js';
+import groceryItemViews from './views/groceryItems.js';
+
+router.use('/brands', brandViews);
+router.use('/products', productViews);
+router.use('/grocery-items', groceryItemViews);
 
 export default router;

@@ -5,7 +5,10 @@ module.exports = {
     database: 'grocery_store_mapper',
     host: '127.0.0.1',
     port: 5432,
-    dialect: 'postgres'
+    dialect: 'postgres',
+    define: {
+      underscored: true
+    }
   },
   test: {
     username: 'database_test',
@@ -13,7 +16,10 @@ module.exports = {
     database: 'database_test',
     host: '127.0.0.1',
     port: 5432,
-    dialect: 'postgres'
+    dialect: 'postgres',
+    define: {
+      underscored: true
+    }
   },
   production: {
     username: process.env.DB_USERNAME,
@@ -25,6 +31,9 @@ module.exports = {
     ssl: true,
     dialectOptions: {
       ssl: true
+    },
+    define: {
+      underscored: true
     }
   }
 };

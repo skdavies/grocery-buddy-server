@@ -1,7 +1,7 @@
 require('dotenv').config();
 import express from 'express';
 import bodyParser from 'body-parser';
-import router from './src/router';
+import router from './src/router.js';
 import logger from 'morgan';
 let app = express();
 
@@ -14,6 +14,9 @@ app.use('/', router);
 
 const port = process.env.PORT || 3000;
 
-app.listen(port, () => {
-  console.log('Example app listening on port 3000!')
+import models from './src/models/index.js'
+models.sequelize.sync({underscore: true}).then(() => {
+  app.listen(port, () => {
+    console.log('Your Server is up and running');
+  });
 });
