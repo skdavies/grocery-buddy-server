@@ -15,9 +15,7 @@ fs
     return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js');
   })
   .map(function (file) {
-    console.log(path.join(__dirname, file));
     const model = require(path.join(__dirname, file)).default;
-    console.log(model);
     db[model.name] = model.init(sequelize);
   });
 

@@ -3,7 +3,7 @@ import express from 'express';
 let router = express.Router();
 import models from '../models/index.js';
 
-const Product = models.Product;
+const { Product } = models;
 
 router.get('/', (req, res) => {
   const offset = req.query.offset || 0;
