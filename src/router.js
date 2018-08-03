@@ -17,12 +17,12 @@ router.get('/', (req, res, next) => {
   res.json(languages);
 });
 
-import brandViews from './views/brands.js';
-import productViews from './views/products.js';
-import groceryItemViews from './views/groceryItems.js';
+import brandView from './views/brand.view.js';
+import productView from './views/product.view.js';
+import groceryItemView from './views/groceryItem.view.js';
 
-router.use('/brands', brandViews);
-router.use('/products', productViews);
-router.use('/grocery-items', groceryItemViews);
+router.use('/brands', brandView);
+router.use('/products', productView);
+router.use('/grocery-items', groceryItemView);
 
 export default router;
