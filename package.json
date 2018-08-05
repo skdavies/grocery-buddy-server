@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "babel-node": "babel-node",
-    "dev": "nodemon --exec npm run babel-node -- server.js"
+    "server": "nodemon --exec npm run babel-node -- server.js"
   },
   "author": "The Illustrious Samuel Kenton Davies",
   "license": "ISC",

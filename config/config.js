@@ -1,5 +1,5 @@
 module.exports = {
-  development: {
+  local: {
     username: 'sdavies',
     password: null,
     database: 'grocery_store_mapper',
@@ -10,7 +10,7 @@ module.exports = {
       underscored: true
     }
   },
-  test: {
+  development: {
     username: 'database_test',
     password: null,
     database: 'database_test',
