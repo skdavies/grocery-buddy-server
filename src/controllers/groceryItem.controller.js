@@ -1,0 +1,68 @@
+import models from '../models/index.js';
+
+const { GroceryItem, Product, Brand } = models;
+
+const getAllGroceryItems = (req, res) => {
+  const offset = req.query.offset || 0;
+  const limit = req.query.limit || 25;
+  GroceryItem.findAll({ offset, limit })
+    .then((groceryItems) => {
+      res.json(groceryItems);
+    })
+    .catch((err) => {
+      res.sendStatus(500);
+    });
+};
+
+const getGroceryItemById = (req, res) => {
+  GroceryItem.findOne({
+    where: { uuid: req.params.groceryItemId },
+    include: [{ model: Product, as: 'product' }, { model: Brand, as: 'brand' }]
+  })
+    .then((groceryItem) => {
+      res.json(groceryItem); //TODO abstract into function in class
+    })
+    .catch((err) => {
+      res.sendStatus(500);
+    });
+};
+
+const createGroceryItem = (req, res) => {
+  const { brand_uuid, product_uuid } = req.body;
+  if (!brand_uuid || !product_uuid) {
+    res.sendStatus(400);
+  } else {
+    GroceryItem.create({ brand_uuid, product_uuid }, {
+      include: [{ model: Product, as: 'product' }, { model: Brand, as: 'brand' }]
+    })
+      .then((groceryItem) => {
+        res.json(groceryItem);
+      })
+      .catch((err) => {
+        if (err.name === 'SequelizeValidationError') { //TODO abstract into function in class
+          res.status(400).send(err.message);
+        } else {
+          res.sendStatus(500);
+        }
+      });
+  }
+};
+
+const deleteGroceryItem = (req, res) => {
+  GroceryItem.destroy({ where: { uuid: req.params.groceryItemId } })
+    .then((response) => {
+      res.sendStatus(200);
+    })
+    .catch((err) => {
+      res.sendStatus(500);
+    });
+};
+
+const groceryItemController = {
+  getAllGroceryItems,
+  getGroceryItemById,
+  createGroceryItem,
+  deleteGroceryItem
+};
+
+export default groceryItemController;
