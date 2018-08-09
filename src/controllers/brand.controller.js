@@ -26,7 +26,7 @@ const getBrandById = (req, res) => {
 };
 
 const updateBrand = (req, res) => {
-  if (!req.body.name) {
+  if (!Brand.hasRequiredFields(req.body)) {
     res.sendStatus(400);
   } else {
     Brand.update({ name: req.body.name }, { where: { uuid: req.params.brandId }, returning: true })
@@ -40,7 +40,7 @@ const updateBrand = (req, res) => {
 };
 
 const createBrand = (req, res) => {
-  if (!req.body.name) {
+  if (!Brand.hasRequiredFields(req.body)) {
     res.sendStatus(400);
   } else {
     Brand.create({ name: req.body.name })

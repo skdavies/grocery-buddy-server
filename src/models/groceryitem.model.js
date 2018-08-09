@@ -25,4 +25,8 @@ export default class GroceryItem extends Sequelize.Model {
       as: 'brand'
     });
   }
+
+  static hasRequiredFields(data) {
+    return !!(data.brand_uuid) && !!(data.product_uuid);
+  }
 }

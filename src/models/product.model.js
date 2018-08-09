@@ -31,4 +31,8 @@ export default class Product extends Sequelize.Model {
 
   static associate(models) {
   }
+
+  static hasRequiredFields(data) {
+    return !!(data.name);
+  }
 }

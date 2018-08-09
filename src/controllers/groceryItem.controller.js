@@ -29,10 +29,10 @@ const getGroceryItemById = (req, res) => {
 };
 
 const createGroceryItem = (req, res) => {
-  const { brand_uuid, product_uuid } = req.body;
-  if (!brand_uuid || !product_uuid) {
+  if (!GroceryItem.hasRequiredFields(req.body)) {
     res.sendStatus(400);
   } else {
+    const { brand_uuid, product_uuid } = req.body;
     GroceryItem.create({ brand_uuid, product_uuid }, {
       include: [{ model: Product, as: 'product' }, { model: Brand, as: 'brand' }]
     })

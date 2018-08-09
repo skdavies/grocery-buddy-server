@@ -26,7 +26,7 @@ const getProductById = (req, res) => {
 };
 
 const updateProduct = (req, res) => {
-  if (!req.body.name) {
+  if (!Product.hasRequiredFields(req.body)) {
     res.sendStatus(400);
   } else {
     Product.update({ name: req.body.name }, { where: { uuid: req.params.productId }, returning: true })
@@ -40,7 +40,7 @@ const updateProduct = (req, res) => {
 };
 
 const createProduct = (req, res) => {
-  if (!req.body.name) {
+  if (!Product.hasRequiredFields(req.body)) {
     res.sendStatus(400);
   } else {
     Product.create({ name: req.body.name })
