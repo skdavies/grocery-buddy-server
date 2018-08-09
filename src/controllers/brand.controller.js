@@ -1,4 +1,5 @@
 import models from '../models/index.js';
+import { genericUpdateSuccessResponse, genericErrorResponse } from '../utils/responses.js';
 
 const { Brand } = models;
 
@@ -17,7 +18,7 @@ const getAllBrands = (req, res) => {
 const getBrandById = (req, res) => {
   Brand.findOne({ where: { uuid: req.params.brandId } })
     .then((brand) => {
-      res.json(brand); //TODO abstract into function
+      res.json(brand);
     })
     .catch((err) => {
       res.sendStatus(500);
@@ -30,14 +31,10 @@ const updateBrand = (req, res) => {
   } else {
     Brand.update({ name: req.body.name }, { where: { uuid: req.params.brandId }, returning: true })
       .then((response) => {
-        res.json(response[1][0]); //TODO abstract into function
+        genericUpdateSuccessResponse(response);
       })
       .catch((err) => {
-        if (err.name === 'SequelizeValidationError') {
-          res.status(400).send(err.message);
-        } else {
-          res.sendStatus(500);
-        }
+        genericErrorResponse(err, res);
       });
   }
 };
@@ -51,11 +48,7 @@ const createBrand = (req, res) => {
         res.json(brand);
       })
       .catch((err) => {
-        if (err.name === 'SequelizeValidationError') { //TODO abstract into function
-          res.status(400).send(err.message);
-        } else {
-          res.sendStatus(500);
-        }
+        genericErrorResponse(err, res);
       });
   }
 };

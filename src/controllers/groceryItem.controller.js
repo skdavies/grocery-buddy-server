@@ -1,4 +1,5 @@
 import models from '../models/index.js';
+import { genericErrorResponse } from '../utils/responses.js';
 
 const { GroceryItem, Product, Brand } = models;
 
@@ -20,7 +21,7 @@ const getGroceryItemById = (req, res) => {
     include: [{ model: Product, as: 'product' }, { model: Brand, as: 'brand' }]
   })
     .then((groceryItem) => {
-      res.json(groceryItem); //TODO abstract into function in class
+      res.json(groceryItem);
     })
     .catch((err) => {
       res.sendStatus(500);
@@ -39,11 +40,7 @@ const createGroceryItem = (req, res) => {
         res.json(groceryItem);
       })
       .catch((err) => {
-        if (err.name === 'SequelizeValidationError') { //TODO abstract into function in class
-          res.status(400).send(err.message);
-        } else {
-          res.sendStatus(500);
-        }
+        genericErrorResponse(err, res);
       });
   }
 };

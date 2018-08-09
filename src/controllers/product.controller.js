@@ -1,4 +1,5 @@
 import models from '../models/index.js';
+import { genericUpdateSuccessResponse, genericErrorResponse } from '../utils/responses.js';
 
 const { Product } = models;
 
@@ -17,7 +18,7 @@ const getAllProducts = (req, res) => {
 const getProductById = (req, res) => {
   Product.findOne({ where: { uuid: req.params.productId } })
     .then((product) => {
-      res.json(product); //TODO abstract into function
+      res.json(product);
     })
     .catch((err) => {
       res.sendStatus(500);
@@ -29,15 +30,11 @@ const updateProduct = (req, res) => {
     res.sendStatus(400);
   } else {
     Product.update({ name: req.body.name }, { where: { uuid: req.params.productId }, returning: true })
-      .then((response) => {
-        res.json(response[1][0]); //TODO abstract into function
+      .then((data) => {
+        genericUpdateSuccessResponse(data, res);
       })
       .catch((err) => {
-        if (err.name === 'SequelizeValidationError') {
-          res.status(400).send(err.message);
-        } else {
-          res.sendStatus(500);
-        }
+        genericErrorResponse(err, res);
       });
   }
 };
@@ -51,11 +48,7 @@ const createProduct = (req, res) => {
         res.json(product);
       })
       .catch((err) => {
-        if (err.name === 'SequelizeValidationError') { //TODO abstract into function
-          res.status(400).send(err.message);
-        } else {
-          res.sendStatus(500);
-        }
+        genericErrorResponse(err, res);
       });
   }
 };
