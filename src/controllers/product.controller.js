@@ -1,66 +1,64 @@
 import models from '../models/index.js';
-import { genericUpdateSuccessResponse, genericErrorResponse } from '../utils/responses.js';
+import { genericUpdateSuccessResponse } from '../utils/utils.js';
 
 const { Product } = models;
 
-const getAllProducts = (req, res) => {
+const getAllProducts = async (req, res, next) => {
   const offset = req.query.offset || 0;
   const limit = req.query.limit || 25;
-  Product.findAll({ offset, limit })
-    .then((products) => {
-      res.json(products);
-    })
-    .catch((err) => {
-      res.sendStatus(500);
-    });
+  try {
+    const products = await Product.findAll({ offset, limit });
+    res.json(products);
+  } catch (err) {
+    next(err);
+  }
 };
 
-const getProductById = (req, res) => {
-  Product.findOne({ where: { uuid: req.params.productId } })
-    .then((product) => {
+const getProductById = async (req, res, next) => {
+  try {
+    const product = await Product.findOne({ where: { uuid: req.params.productId } });
+    res.json(product);
+  } catch (err) {
+    next(err);
+  }
+};
+
+const updateProduct = async (req, res, next) => {
+  if (!Product.hasRequiredFields(req.body)) {
+    res.sendStatus(400);
+  } else {
+    try {
+      const data = await Product.update({ name: req.body.name }, {
+        where: { uuid: req.params.productId },
+        returning: true
+      });
+      genericUpdateSuccessResponse(data, res);
+    } catch (err) {
+      next(err);
+    }
+  }
+};
+
+const createProduct = async (req, res, next) => {
+  if (!Product.hasRequiredFields(req.body)) {
+    res.sendStatus(400);
+  } else {
+    try {
+      const product = await Product.create({ name: req.body.name });
       res.json(product);
-    })
-    .catch((err) => {
-      res.sendStatus(500);
-    });
-};
-
-const updateProduct = (req, res) => {
-  if (!Product.hasRequiredFields(req.body)) {
-    res.sendStatus(400);
-  } else {
-    Product.update({ name: req.body.name }, { where: { uuid: req.params.productId }, returning: true })
-      .then((data) => {
-        genericUpdateSuccessResponse(data, res);
-      })
-      .catch((err) => {
-        genericErrorResponse(err, res);
-      });
+    } catch (err) {
+      next(err);
+    }
   }
 };
 
-const createProduct = (req, res) => {
-  if (!Product.hasRequiredFields(req.body)) {
-    res.sendStatus(400);
-  } else {
-    Product.create({ name: req.body.name })
-      .then((product) => {
-        res.json(product);
-      })
-      .catch((err) => {
-        genericErrorResponse(err, res);
-      });
+const deleteProduct = async (req, res, next) => {
+  try {
+    await Product.destroy({ where: { uuid: req.params.productId } });
+    res.sendStatus(200);
+  } catch (err) {
+    next(err);
   }
-};
-
-const deleteProduct = (req, res) => {
-  Product.destroy({ where: { uuid: req.params.productId } })
-    .then((response) => {
-      res.sendStatus(200);
-    })
-    .catch((err) => {
-      res.sendStatus(500);
-    });
 };
 
 const productController = {
