@@ -8,7 +8,9 @@ const getAllBrands = async (req, res, next) => {
   const limit = req.query.limit || 25;
   try {
     const brands = await Brand.findAll({ offset, limit });
-    res.json(brands);
+    res.json(brands.map((brand) => {
+      return brand.serialize()
+    }));
   } catch (err) {
     next(err);
   }
@@ -17,7 +19,7 @@ const getAllBrands = async (req, res, next) => {
 const getBrandById = async (req, res, next) => {
   try {
     const brand = await Brand.findOne({ where: { uuid: req.params.brandId } });
-    res.json(brand);
+    res.json(brand.serialize());
   } catch (err) {
     next(err);
   }
@@ -45,7 +47,7 @@ const createBrand = async (req, res, next) => {
   } else {
     try {
       const brand = await Brand.create({ name: req.body.name });
-      res.json(brand);
+      res.json(brand.serialize());
     } catch (err) {
       next(err);
     }

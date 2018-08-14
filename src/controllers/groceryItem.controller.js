@@ -6,8 +6,14 @@ const getAllGroceryItems = async (req, res, next) => {
   const offset = req.query.offset || 0;
   const limit = req.query.limit || 25;
   try {
-    const groceryItems = await GroceryItem.findAll({ offset, limit });
-    res.json(groceryItems);
+    const groceryItems = await GroceryItem.findAll({
+      offset,
+      limit,
+      include: [{ model: Product, as: 'product' }, { model: Brand, as: 'brand' }]
+    });
+    res.json(groceryItems.map((groceryItem) => {
+      return groceryItem.serialize();
+    }));
   } catch (err) {
     next(err);
   }
@@ -19,7 +25,7 @@ const getGroceryItemById = async (req, res, next) => {
       where: { uuid: req.params.groceryItemId },
       include: [{ model: Product, as: 'product' }, { model: Brand, as: 'brand' }]
     });
-    res.json(groceryItem);
+    res.json(groceryItem.serialize());
   } catch (err) {
     next(err);
   }
@@ -34,7 +40,7 @@ const createGroceryItem = async (req, res, next) => {
       const groceryItem = await GroceryItem.create({ brand_uuid, product_uuid }, {
         include: [{ model: Product, as: 'product' }, { model: Brand, as: 'brand' }]
       });
-      res.json(groceryItem);
+      res.json(groceryItem.serialize());
     } catch (err) {
       next(err);
     }

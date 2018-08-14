@@ -1,8 +1,8 @@
 import Sequelize from 'sequelize';
 
 export const genericUpdateSuccessResponse = (data, res) => {
-  if (data[0] && data[0][1]) {
-    res.json(data[0][1]);
+  if (data[1] && data[1][0]) {
+    res.json(data[1][0].serialize());
   } else {
     res.sendStatus(200);
   }

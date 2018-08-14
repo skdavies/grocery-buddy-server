@@ -8,7 +8,9 @@ const getAllProducts = async (req, res, next) => {
   const limit = req.query.limit || 25;
   try {
     const products = await Product.findAll({ offset, limit });
-    res.json(products);
+    res.json(products.map((product) => {
+      return product.serialize()
+    }));
   } catch (err) {
     next(err);
   }
@@ -17,7 +19,7 @@ const getAllProducts = async (req, res, next) => {
 const getProductById = async (req, res, next) => {
   try {
     const product = await Product.findOne({ where: { uuid: req.params.productId } });
-    res.json(product);
+    res.json(product.serialize());
   } catch (err) {
     next(err);
   }
@@ -45,7 +47,7 @@ const createProduct = async (req, res, next) => {
   } else {
     try {
       const product = await Product.create({ name: req.body.name });
-      res.json(product);
+      res.json(product.serialize());
     } catch (err) {
       next(err);
     }

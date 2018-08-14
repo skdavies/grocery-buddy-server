@@ -35,4 +35,13 @@ export default class Product extends Sequelize.Model {
   static hasRequiredFields(data) {
     return !!(data.name);
   }
+
+  serialize() {
+    return {
+      uuid: this.uuid,
+      name: this.name,
+      createdAt: this.created_at,
+      updatedAt: this.updated_at
+    };
+  }
 }
