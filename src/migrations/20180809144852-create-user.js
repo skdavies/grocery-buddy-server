@@ -39,6 +39,7 @@ module.exports = {
       },
       type: {
         type: Sequelize.ENUM('SHOPPER', 'MANAGER', 'ADMIN'),
+        defaultValue: 'SHOPPER',
         allowNull: false
       }
     });

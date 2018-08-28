@@ -1,58 +1,59 @@
 import models from '../models/index.js';
-import { genericErrorResponse } from '../utils/responses.js';
 
 const { GroceryItem, Product, Brand } = models;
 
-const getAllGroceryItems = (req, res) => {
+const getAllGroceryItems = async (req, res, next) => {
   const offset = req.query.offset || 0;
   const limit = req.query.limit || 25;
-  GroceryItem.findAll({ offset, limit })
-    .then((groceryItems) => {
-      res.json(groceryItems);
-    })
-    .catch((err) => {
-      res.sendStatus(500);
+  try {
+    const groceryItems = await GroceryItem.findAll({
+      offset,
+      limit,
+      include: [{ model: Product, as: 'product' }, { model: Brand, as: 'brand' }]
     });
+    res.json(groceryItems.map((groceryItem) => {
+      return groceryItem.serialize();
+    }));
+  } catch (err) {
+    next(err);
+  }
 };
 
-const getGroceryItemById = (req, res) => {
-  GroceryItem.findOne({
-    where: { uuid: req.params.groceryItemId },
-    include: [{ model: Product, as: 'product' }, { model: Brand, as: 'brand' }]
-  })
-    .then((groceryItem) => {
-      res.json(groceryItem);
-    })
-    .catch((err) => {
-      res.sendStatus(500);
+const getGroceryItemById = async (req, res, next) => {
+  try {
+    const groceryItem = await GroceryItem.findOne({
+      where: { uuid: req.params.groceryItemId },
+      include: [{ model: Product, as: 'product' }, { model: Brand, as: 'brand' }]
     });
+    res.json(groceryItem.serialize());
+  } catch (err) {
+    next(err);
+  }
 };
 
-const createGroceryItem = (req, res) => {
+const createGroceryItem = async (req, res, next) => {
   if (!GroceryItem.hasRequiredFields(req.body)) {
     res.sendStatus(400);
   } else {
     const { brand_uuid, product_uuid } = req.body;
-    GroceryItem.create({ brand_uuid, product_uuid }, {
-      include: [{ model: Product, as: 'product' }, { model: Brand, as: 'brand' }]
-    })
-      .then((groceryItem) => {
-        res.json(groceryItem);
-      })
-      .catch((err) => {
-        genericErrorResponse(err, res);
+    try {
+      const groceryItem = await GroceryItem.create({ brand_uuid, product_uuid }, {
+        include: [{ model: Product, as: 'product' }, { model: Brand, as: 'brand' }]
       });
+      res.json(groceryItem.serialize());
+    } catch (err) {
+      next(err);
+    }
   }
 };
 
-const deleteGroceryItem = (req, res) => {
-  GroceryItem.destroy({ where: { uuid: req.params.groceryItemId } })
-    .then((response) => {
-      res.sendStatus(200);
-    })
-    .catch((err) => {
-      res.sendStatus(500);
-    });
+const deleteGroceryItem = async (req, res, next) => {
+  try {
+    await GroceryItem.destroy({ where: { uuid: req.params.groceryItemId } });
+    res.sendStatus(200);
+  } catch (err) {
+    next(err);
+  }
 };
 
 const groceryItemController = {

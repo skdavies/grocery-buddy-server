@@ -25,16 +25,11 @@ export default class User extends Sequelize.Model {
         },
         password: {
           type: DataTypes.STRING,
-          allowNull: false,
-          validate: {
-            len: {
-              args: [2, 16],
-              msg: VALIDATION_ERRORS.LENGTH_OUT_OF_BOUNDS(2, 16)
-            }
-          }
+          allowNull: false
         },
         type: {
-          type: DataTypes.ENUM(...USER_TYPES),
+          type: DataTypes.ENUM(...Object.keys(USER_TYPES)),
+          defaultValue: 'SHOPPER',
           allowNull: false
         },
         firstName: {
@@ -42,8 +37,8 @@ export default class User extends Sequelize.Model {
           field: 'first_name',
           validate: {
             len: {
-              args: [2, 16],
-              msg: VALIDATION_ERRORS.LENGTH_OUT_OF_BOUNDS(2, 16)
+              args: [1, 16],
+              msg: VALIDATION_ERRORS.LENGTH_OUT_OF_BOUNDS(1, 16)
             }
           }
         },
@@ -67,7 +62,15 @@ export default class User extends Sequelize.Model {
   static associate(models) {
   }
 
-  static hasRequiredFields(data) {
-    return !!(data.username) && !!(data.password) && !!(data.type);
+  serialize() {
+    return {
+      username: this.username,
+      uuid: this.uuid,
+      createdAt: this.created_at,
+      updatedAt: this.updated_at,
+      type: this.type,
+      firstName: this.firstName,
+      lastName: this.lastName
+    };
   }
 }
