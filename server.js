@@ -20,12 +20,12 @@ app.use('/', router);
 
 const port = process.env.GSM_PORT || 8000;
 
-import models from './src/models/index.js'
+import models from './src/models/index.js';
 
 app.use(sequelizeErrorHandler);
 
 models.sequelize.sync({ underscore: true }).then(() => {
-  app.listen(port, () => {
-    console.log('Your Server is up and running');
-  });
+	app.listen(port, () => {
+		console.log('Your Server is up and running');
+	});
 });

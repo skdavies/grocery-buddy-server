@@ -3,8 +3,7 @@ import express from 'express';
 let router = express.Router();
 /* GET home page. */
 router.get('/', (req, res, next) => {
-  const descString = 'API for Grocery Store Mapper';
-  res.json(descString);
+	res.json('API for Grocery Store Mapper');
 });
 
 import brandView from './views/brand.view.js';
