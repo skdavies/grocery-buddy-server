@@ -24,6 +24,7 @@ module.exports = {
 			brand_uuid: {
 				type: Sequelize.UUID,
 				allowNull: false,
+				onDelete: 'CASCADE',
 				references: {
 					model: 'brands',
 					key: 'uuid'
@@ -32,6 +33,7 @@ module.exports = {
 			product_uuid: {
 				type: Sequelize.UUID,
 				allowNull: false,
+				onDelete: 'CASCADE',
 				references: {
 					model: 'products',
 					key: 'uuid'

@@ -19,10 +19,13 @@ export default class GroceryItem extends Sequelize.Model {
 
 	static associate(models) {
 		this.belongsTo(models.Product, {
-			as: 'product'
+			as: 'product',
+			onDelete: 'CASCADE'
+
 		});
 		this.belongsTo(models.Brand, {
-			as: 'brand'
+			as: 'brand',
+			onDelete: 'CASCADE'
 		});
 	}
 
