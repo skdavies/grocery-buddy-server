@@ -1,6 +1,5 @@
 import models from '../models/index.js';
-import { genericUpdateSuccessResponse, signToken } from '../utils/utils.js';
-import { USER_TYPES } from '../constants/types';
+import { genericUpdateSuccessResponse, signToken, serializeList, isAdminOrOwner } from '../utils/utils.js';
 
 const { User } = models;
 
@@ -9,9 +8,7 @@ const getAllUsers = async (req, res, next) => {
 	const limit = req.query.limit || 25;
 	try {
 		const users = await User.findAll({ offset, limit });
-		res.json(users.map((user) => {
-			return user.serialize();
-		}));
+		res.json(serializeList(users));
 	} catch (err) {
 		next(err);
 	}
@@ -28,11 +25,11 @@ const getUserById = async (req, res, next) => {
 
 const updateUser = async (req, res, next) => {
 	try {
-		if (req.user.type === USER_TYPES.ADMIN || req.params.userId === req.user.uuid) {
+		if (isAdminOrOwner(req)) {
 			let response = await User.update(req.body, { where: { uuid: req.params.userId }, returning: true });
 			genericUpdateSuccessResponse(response, res);
 		} else {
-			res.sendStatus(401);
+			res.sendStatus(403);
 		}
 	} catch (err) {
 		next(err);

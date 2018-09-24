@@ -10,6 +10,20 @@ export const genericUpdateSuccessResponse = (data, res) => {
 	}
 };
 
+export const serializeList = (list) => {
+	list.map((item) => {
+		return item.serialize();
+	});
+};
+
+export const isAdmin = (req) => {
+	return req.user && req.user.type === USER_TYPES.ADMIN;
+};
+
+export const isAdminOrOwner = (req) => {
+	return req.user && (req.user.type === USER_TYPES.ADMIN || req.params.userId === req.user.uuid);
+};
+
 export const sequelizeErrorHandler = (err, req, res, next) => {
 	console.log(err);
 	// TODO ONE DAY THESE SHOULD BE LOGGED IN SOME WAY OTHER THAN CONSOLE

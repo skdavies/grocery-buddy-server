@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
 	up: (queryInterface, Sequelize) => {
-		return queryInterface.createTable('users', {
+		return queryInterface.createTable('grocery_lists', {
 			uuid: {
 				type: Sequelize.UUID,
 				defaultValue: Sequelize.UUIDV4,
@@ -13,11 +13,7 @@ module.exports = {
 				autoIncrement: true,
 				type: Sequelize.INTEGER
 			},
-			username: {
-				type: Sequelize.STRING,
-				allowNull: false
-			},
-			password: {
+			name: {
 				type: Sequelize.STRING,
 				allowNull: false
 			},
@@ -29,22 +25,17 @@ module.exports = {
 				allowNull: false,
 				type: Sequelize.DATE
 			},
-			first_name: {
-				type: Sequelize.STRING,
-				allowNull: false
-			},
-			last_name: {
-				type: Sequelize.STRING,
-				allowNull: false
-			},
-			type: {
-				type: Sequelize.ENUM('SHOPPER', 'MANAGER', 'ADMIN'),
-				defaultValue: 'SHOPPER',
-				allowNull: false
+			user_uuid: {
+				allowNull: false,
+				type: Sequelize.UUID,
+				references: {
+					model: 'users',
+					key: 'uuid'
+				}
 			}
 		});
 	},
 	down: (queryInterface, Sequelize) => {
-		return queryInterface.dropTable('users');
+		return queryInterface.dropTable('grocery_lists');
 	}
 };
