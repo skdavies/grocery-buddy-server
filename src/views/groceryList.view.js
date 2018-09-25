@@ -4,10 +4,19 @@ import groceryListController from '../controllers/groceryList.controller.js';
 
 let router = express.Router();
 
-router.get('/', passport.authenticate('jwt', { session: false }), groceryListController.getAllGroceryLists);
-router.get('/:groceryListId', groceryListController.getGroceryListById);
-router.post('/', groceryListController.createGroceryList);
-router.put('/:groceryListId', groceryListController.updateGroceryList);
-router.delete('/:groceryListId', groceryListController.deleteGroceryList);
+router.get('/', passport.authenticate('jwt', { session: false }),
+	groceryListController.getAllGroceryLists);
+
+router.get('/:groceryListId', passport.authenticate('jwt', { session: false }),
+	groceryListController.getGroceryListById);
+
+router.post('/', passport.authenticate('jwt', { session: false }),
+	groceryListController.createGroceryList);
+
+router.put('/:groceryListId', passport.authenticate('jwt', { session: false }),
+	groceryListController.updateGroceryList);
+
+router.delete('/:groceryListId', passport.authenticate('jwt', { session: false }),
+	groceryListController.deleteGroceryList);
 
 export default router;

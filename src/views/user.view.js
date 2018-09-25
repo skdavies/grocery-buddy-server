@@ -5,26 +5,25 @@ import passport from 'passport';
 
 let router = express.Router();
 
-router.post('/login',
-	passport.authenticate('login', { session: false }),
+router.post('/login', passport.authenticate('login', { session: false }),
 	userController.login);
 
-router.post('/register',
-	passport.authenticate('register', { session: false }),
+router.post('/register', passport.authenticate('register', { session: false }),
 	userController.register);
 
-router.get('/', userController.getAllUsers);
+router.get('/', passport.authenticate('jwt', { session: false }),
+	userController.getAllUsers);
 
-router.get('/:userId', userController.getUserById);
+router.get('/:userId', passport.authenticate('jwt', { session: false }),
+	userController.getUserById);
 
-router.put('/:userId',
-	passport.authenticate('jwt', { session: false }),
+router.put('/:userId', passport.authenticate('jwt', { session: false }),
 	userController.updateUser);
 
-router.delete('/:userId', userController.deleteUser);
+router.delete('/:userId', passport.authenticate('jwt', { session: false }),
+	userController.deleteUser);
 
-router.put('/:userId/grocery-lists',
-	passport.authenticate('jwt', { session: false }),
+router.put('/:userId/grocery-lists', passport.authenticate('jwt', { session: false }),
 	groceryListController.getGroceryListsByUser);
 
 export default router;
