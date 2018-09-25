@@ -29,6 +29,10 @@ export default class GroceryList extends Sequelize.Model {
 	}
 
 	static associate(models) {
+		// TODO see if I need this for both ways or not. Can I access a grocery list from a user and vice versa with it only defined in one place?
+		this.belongsTo(models.User, {
+			as: 'user'
+		});
 	}
 
 	static hasRequiredFields(data) {

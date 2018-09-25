@@ -21,7 +21,6 @@ export default class GroceryItem extends Sequelize.Model {
 		this.belongsTo(models.Product, {
 			as: 'product',
 			onDelete: 'CASCADE'
-
 		});
 		this.belongsTo(models.Brand, {
 			as: 'brand',

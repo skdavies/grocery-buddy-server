@@ -20,6 +20,7 @@ const getAllGroceryLists = async (req, res, next) => {
 	
 const getGroceryListById = async (req, res, next) => {
 	try {
+		//TODO try getting just the groceryList then use groceryList.getUser() which is a predefined func
 		const groceryList = await GroceryList.findOne({
 			where: { uuid: req.params.groceryListId },
 			include: [{ model: User, as: 'user' }] });
