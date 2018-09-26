@@ -11,7 +11,7 @@ export const genericUpdateSuccessResponse = (data, res) => {
 };
 
 export const serializeList = (list) => {
-	list.map((item) => {
+	return list.map((item) => {
 		return item.serialize();
 	});
 };

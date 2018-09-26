@@ -1,5 +1,6 @@
 import { VALIDATION_ERRORS } from '../constants/errorConstants.js';
 import Sequelize, { DataTypes } from 'sequelize';
+import { serializeList } from '../utils/utils';
 
 export default class GroceryList extends Sequelize.Model {
 
@@ -29,9 +30,12 @@ export default class GroceryList extends Sequelize.Model {
 	}
 
 	static associate(models) {
-		// TODO see if I need this for both ways or not. Can I access a grocery list from a user and vice versa with it only defined in one place?
 		this.belongsTo(models.User, {
 			as: 'user'
+		});
+		this.hasMany(models.GroceryListItem, {
+			as: 'items',
+			onDelete: 'CASCADE'
 		});
 	}
 
@@ -44,7 +48,8 @@ export default class GroceryList extends Sequelize.Model {
 			uuid: this.uuid,
 			name: this.name,
 			createdAt: this.created_at,
-			updatedAt: this.updated_at
+			updatedAt: this.updated_at,
+			items: this.items ? serializeList(this.items) : []
 		};
 	}
 }

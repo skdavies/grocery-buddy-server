@@ -61,7 +61,9 @@ export default class User extends Sequelize.Model {
 	}
 
 	static associate(models) {
-		this.hasMany(models.GroceryList);
+		this.hasMany(models.GroceryList, {
+			as : 'groceryLists'
+		});
 	}
 
 	serialize() {

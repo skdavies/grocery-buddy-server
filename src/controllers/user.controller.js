@@ -47,9 +47,10 @@ const updateUser = async (req, res, next) => {
 
 const register = async (req, res, next) => {
 	try {
+		const serializedUser = req.user.serialize();
 		res.json({
-			user: req.user.serialize(),
-			token: signToken(req.user)
+			user: serializedUser,
+			token: signToken(serializedUser)
 		});
 	} catch (err) {
 		next(err);

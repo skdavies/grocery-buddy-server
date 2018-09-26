@@ -30,12 +30,10 @@ module.exports = {
 				type: Sequelize.DATE
 			},
 			first_name: {
-				type: Sequelize.STRING,
-				allowNull: false
+				type: Sequelize.STRING
 			},
 			last_name: {
-				type: Sequelize.STRING,
-				allowNull: false
+				type: Sequelize.STRING
 			},
 			type: {
 				type: Sequelize.ENUM('SHOPPER', 'MANAGER', 'ADMIN'),

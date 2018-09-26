@@ -36,6 +36,30 @@
       {
         "args": "none"
       }
+    ],
+    "comma-dangle": [
+      "error",
+      "never"
+    ],
+    "comma-spacing": [
+      "error",
+      {
+        "before": false,
+        "after": true
+      }
+    ],
+    "no-trailing-spaces": "error",
+    "space-before-blocks": "error",
+    "keyword-spacing": [
+      "error",
+      {
+        "before": true,
+        "after": true
+      }
+    ],
+    "object-curly-spacing": [
+      "error",
+      "always"
     ]
   }
 }

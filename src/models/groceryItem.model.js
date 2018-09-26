@@ -29,7 +29,7 @@ export default class GroceryItem extends Sequelize.Model {
 	}
 
 	static hasRequiredFields(data) {
-		return !!(data.brand_uuid) && !!(data.product_uuid);
+		return !!(data.product_uuid);
 	}
 
 	serialize() {

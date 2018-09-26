@@ -36,7 +36,7 @@ export default class GroceryListItem extends Sequelize.Model {
 			as: 'groceryItem'
 		});
 	}
-  
+
 	serialize() {
 		return {
 			uuid: this.uuid,
@@ -44,7 +44,8 @@ export default class GroceryListItem extends Sequelize.Model {
 			updatedAt: this.updated_at,
 			rank: this.rank,
 			quantity: this.quantity,
-			completed: this.completed
+			completed: this.completed,
+			groceryItem: this.groceryItem.serialize()
 		};
 	}
 }

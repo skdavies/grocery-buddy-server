@@ -11,7 +11,7 @@ module.exports = {
 				allowNull: false,
 				type: Sequelize.UUID,
 				defaultValue: Sequelize.UUIDV4,
-				primaryKey: true,
+				primaryKey: true
 			},
 			rank: {
 				allowNull: false,
@@ -32,6 +32,14 @@ module.exports = {
 				type: Sequelize.UUID,
 				references: {
 					model: 'grocery_items',
+					key: 'uuid'
+				}
+			},
+			grocery_list_uuid: {
+				allowNull: false,
+				type: Sequelize.UUID,
+				references: {
+					model: 'grocery_lists',
 					key: 'uuid'
 				}
 			},
