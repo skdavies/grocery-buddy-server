@@ -61,5 +61,5 @@ export const signToken = (user) => {
 			break;
 		default:
 	}
-	return jwt.sign({ user: tokenUser }, process.env.GSM_JWT_SECRET, options);
+	return jwt.sign({ user: tokenUser }, process.env.GB_JWT_SECRET, options);
 };

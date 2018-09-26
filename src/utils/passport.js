@@ -51,6 +51,6 @@ passport.use('login', new LocalStrategy({ session: false }, loginStrategy));
 passport.use('register', new LocalStrategy({ session: false }, registerStrategy));
 
 passport.use('jwt', new JWTStrategy({
-	secretOrKey: process.env.GSM_JWT_SECRET,
+	secretOrKey: process.env.GB_JWT_SECRET,
 	jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken()
 }, jwtStrategy));

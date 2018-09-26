@@ -1,5 +1,5 @@
 {
-  "name": "grocery-store-mapper-server",
+  "name": "grocery-buddy-server",
   "version": "1.0.0",
   "description": "Node JS RESTful API for grocery store mapping",
   "main": "server.js",

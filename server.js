@@ -18,7 +18,7 @@ app.use(passport.initialize());
 
 app.use('/', router);
 
-const port = process.env.GSM_PORT || 8000;
+const port = process.env.GB_PORT || 8000;
 
 import models from './src/models/index.js';
 
