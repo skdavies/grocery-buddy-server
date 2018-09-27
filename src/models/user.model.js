@@ -1,6 +1,7 @@
 import { VALIDATION_ERRORS } from '../constants/errorConstants.js';
 import { USER_TYPES } from '../constants/types';
 import Sequelize, { DataTypes } from 'sequelize';
+import bcrypt from 'bcrypt';
 
 export default class User extends Sequelize.Model {
 
@@ -55,6 +56,11 @@ export default class User extends Sequelize.Model {
 		},
 		{
 			underscoredAll: true,
+			hooks: {
+				beforeCreate: async (user, options) => {
+					user.password = await bcrypt.hash(user.password, 10);
+				}
+			},
 			sequelize
 		}
 		);

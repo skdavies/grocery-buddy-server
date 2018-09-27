@@ -24,8 +24,7 @@ const loginStrategy = async (username, password, done) => {
 const registerStrategy = async (username, password, done) => {
 	try {
 		if (password.length >= 8 && password.length <= 24) {
-			let hashed = await bcrypt.hash(password, 10);
-			let user = await User.create({ password: hashed, username });
+			let user = await User.create({ password, username });
 			return done(null, user);
 		} else {
 			return done(null, false, { message: VALIDATION_ERRORS.LENGTH_OUT_OF_BOUNDS(8, 24) });
