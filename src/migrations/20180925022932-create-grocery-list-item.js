@@ -10,7 +10,7 @@ module.exports = {
 			uuid: {
 				allowNull: false,
 				type: Sequelize.UUID,
-				defaultValue: Sequelize.UUIDV4,
+				defaultValue: Sequelize.literal('uuid_generate_v4()'),
 				primaryKey: true
 			},
 			rank: {
@@ -45,11 +45,13 @@ module.exports = {
 			},
 			created_at: {
 				allowNull: false,
-				type: Sequelize.DATE
+				type: Sequelize.DATE,
+				defaultValue: Sequelize.fn('now')
 			},
 			updated_at: {
 				allowNull: false,
-				type: Sequelize.DATE
+				type: Sequelize.DATE,
+				defaultValue: Sequelize.fn('now')
 			}
 		});
 	},
