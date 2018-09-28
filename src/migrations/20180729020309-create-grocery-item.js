@@ -9,21 +9,26 @@ module.exports = {
 			},
 			uuid: {
 				type: Sequelize.UUID,
-				defaultValue: Sequelize.UUIDV4,
+				defaultValue: Sequelize.literal('uuid_generate_v4()'),
 				allowNull: false,
 				primaryKey: true
 			},
+			upc: {
+				type: Sequelize.STRING,
+				unique: true
+			},
 			created_at: {
 				allowNull: false,
-				type: Sequelize.DATE
+				type: Sequelize.DATE,
+				defaultValue: Sequelize.fn('now')
 			},
 			updated_at: {
 				allowNull: false,
-				type: Sequelize.DATE
+				type: Sequelize.DATE,
+				defaultValue: Sequelize.fn('now')
 			},
 			brand_uuid: {
 				type: Sequelize.UUID,
-				allowNull: false,
 				onDelete: 'CASCADE',
 				references: {
 					model: 'brands',

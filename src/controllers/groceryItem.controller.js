@@ -35,9 +35,9 @@ const createGroceryItem = async (req, res, next) => {
 	if (!GroceryItem.hasRequiredFields(req.body)) {
 		res.sendStatus(400);
 	} else {
-		const { brand_uuid, product_uuid } = req.body;
+		const { brand_uuid, product_uuid, upc } = req.body;
 		try {
-			const groceryItem = await GroceryItem.create({ brand_uuid, product_uuid }, {
+			const groceryItem = await GroceryItem.create({ brand_uuid, product_uuid, upc }, {
 				include: [{ model: Product, as: 'product' }, { model: Brand, as: 'brand' }]
 			});
 			res.json(groceryItem.serialize());
