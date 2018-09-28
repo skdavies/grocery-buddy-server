@@ -1,4 +1,5 @@
 import models from '../models/index.js';
+import { isAdmin, isShopper } from '../utils/utils';
 
 const { GroceryItem, Product, Brand } = models;
 
@@ -32,7 +33,9 @@ const getGroceryItemById = async (req, res, next) => {
 };
 
 const createGroceryItem = async (req, res, next) => {
-	if (!GroceryItem.hasRequiredFields(req.body)) {
+	if (!isShopper(req)) {
+		res.sendStatus(403);
+	} else if (!GroceryItem.hasRequiredFields(req.body)) {
 		res.sendStatus(400);
 	} else {
 		const { brand_uuid, product_uuid, upc } = req.body;
@@ -48,11 +51,15 @@ const createGroceryItem = async (req, res, next) => {
 };
 
 const deleteGroceryItem = async (req, res, next) => {
-	try {
-		await GroceryItem.destroy({ where: { uuid: req.params.groceryItemId } });
-		res.sendStatus(200);
-	} catch (err) {
-		next(err);
+	if (!isAdmin(req)) {
+		res.sendStatus(403);
+	} else {
+		try {
+			await GroceryItem.destroy({ where: { uuid: req.params.groceryItemId } });
+			res.sendStatus(200);
+		} catch (err) {
+			next(err);
+		}
 	}
 };
 

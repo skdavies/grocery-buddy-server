@@ -51,10 +51,10 @@ const getGroceryListsByUser = async (req, res, next) => {
 };
 
 const updateGroceryList = async (req, res, next) => {
-	if (!GroceryList.hasRequiredFields(req.body)) {
-		res.sendStatus(400);
-	} else if (!isAdminOrOwner(req)) {
+	if (!isAdminOrOwner(req)) {
 		res.sendStatus(403);
+	} else if (!GroceryList.hasRequiredFields(req.body)) {
+		res.sendStatus(400);
 	} else {
 		try {
 			const data = await GroceryList.update({ name: req.body.name },
@@ -69,10 +69,10 @@ const updateGroceryList = async (req, res, next) => {
 
 const createGroceryList = async (req, res, next) => {
 	let { items } = req.body;
-	if (!req.body.name || !items || items.length === 0) {
-		res.sendStatus(400);
-	} else if (!isShopper(req)) {
+	if (!isShopper(req)) {
 		res.sendStatus(403);
+	} else if (!req.body.name || !items || items.length === 0) {
+		res.sendStatus(400);
 	} else {
 		try {
 			// TODO check if more validation needed
