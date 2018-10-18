@@ -1,6 +1,5 @@
 import models from '../models/index.js';
 import { genericUpdateSuccessResponse } from '../utils/utils.js';
-import { isAdmin, isShopper } from '../utils/utils';
 
 const { Brand } = models;
 
@@ -27,9 +26,7 @@ const getBrandById = async (req, res, next) => {
 };
 
 const updateBrand = async (req, res, next) => {
-	if (!isAdmin(req)) {
-		res.sendStatus(403);
-	} else if (!Brand.hasRequiredFields(req.body)) {
+	if (!Brand.hasRequiredFields(req.body)) {
 		res.sendStatus(400);
 	} else {
 		try {
@@ -45,9 +42,7 @@ const updateBrand = async (req, res, next) => {
 };
 
 const createBrand = async (req, res, next) => {
-	if (!isShopper(req)) {
-		res.sendStatus(403);
-	} else if (!Brand.hasRequiredFields(req.body)) {
+	if (!Brand.hasRequiredFields(req.body)) {
 		res.sendStatus(400);
 	} else {
 		try {
@@ -60,15 +55,11 @@ const createBrand = async (req, res, next) => {
 };
 
 const deleteBrand = async (req, res, next) => {
-	if (!isAdmin(req)) {
-		res.sendStatus(403);
-	} else {
-		try {
-			await Brand.destroy({ where: { uuid: req.params.brandId } });
-			res.sendStatus(200);
-		} catch (err) {
-			next(err);
-		}
+	try {
+		await Brand.destroy({ where: { uuid: req.params.brandId } });
+		res.sendStatus(200);
+	} catch (err) {
+		next(err);
 	}
 };
 

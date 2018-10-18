@@ -1,20 +1,17 @@
 import models from '../models/index.js';
 import { genericUpdateSuccessResponse, serializeList, isAdmin, isAdminOrOwner, isShopper } from '../utils/utils.js';
+import { USER_TYPES } from '../constants/types';
 
 const { GroceryList, GroceryListItem } = models;
 
 const getAllGroceryLists = async (req, res, next) => {
 	const offset = req.query.offset || 0;
 	const limit = req.query.limit || 25;
-	if (!isAdmin(req)) {
-		res.sendStatus(403);
-	} else {
-		try {
-			const groceryLists = await GroceryList.findAll({ offset, limit });
-			res.json(serializeList(groceryLists));
-		} catch (err) {
-			next(err);
-		}
+	try {
+		const groceryLists = await GroceryList.findAll({ offset, limit });
+		res.json(serializeList(groceryLists));
+	} catch (err) {
+		next(err);
 	}
 };
 
@@ -27,7 +24,7 @@ const getGroceryListById = async (req, res, next) => {
 				[{ model: GroceryListItem, as: 'items' }, 'rank', 'desc']
 			]
 		});
-		if (isAdmin(req) || req.user.uuid === groceryList.user_uuid) {
+		if (req.user.type === USER_TYPES.ADMIN || groceryList.isOwnedBy(req.user.uuid)) {
 			res.json(groceryList.serialize());
 		} else {
 			res.sendStatus(403);
@@ -38,29 +35,32 @@ const getGroceryListById = async (req, res, next) => {
 };
 
 const getGroceryListsByUser = async (req, res, next) => {
-	if (!isAdminOrOwner(req)) { // change security level here if you want to be able to view other peoples lists
-		res.sendStatus(403);
-	} else {
-		try {
-			const groceryLists = await GroceryList.findAll({ where: { user_uuid: req.params.userId } });
-			res.json(serializeList(groceryLists));
-		} catch (err) {
-			next(err);
-		}
+	try {
+		const groceryLists = await GroceryList.findAll({ where: { user_uuid: req.params.userId } });
+		res.json(serializeList(groceryLists));
+	} catch (err) {
+		next(err);
 	}
 };
 
 const updateGroceryList = async (req, res, next) => {
-	if (!isAdminOrOwner(req)) {
-		res.sendStatus(403);
-	} else if (!GroceryList.hasRequiredFields(req.body)) {
+	const { name, items } = req.body;
+	if (!name || !Array.isArray(items) || items.length === 0) {
 		res.sendStatus(400);
 	} else {
 		try {
-			const data = await GroceryList.update({ name: req.body.name },
-				{ where: { uuid: req.params.groceryListId },
-					returning: true });
-			genericUpdateSuccessResponse(data, res);
+			const groceryList = await GroceryList.findOne({ where: { uuid: req.params.groceryListId } });
+			if (groceryList.isOwnedBy(req.user.uuid)) {
+				groceryList.name = name;
+				for (let i = 0; i < items.length; i++) {
+					items[i].rank = i; // set ranks to the order given
+				}
+				groceryList.items = items;
+				await groceryList.save();
+				res.json(groceryList.serialize());
+			} else {
+				res.sendStatus(403);
+			}
 		} catch (err) {
 			next(err);
 		}
@@ -69,9 +69,7 @@ const updateGroceryList = async (req, res, next) => {
 
 const createGroceryList = async (req, res, next) => {
 	let { items } = req.body;
-	if (!isShopper(req)) {
-		res.sendStatus(403);
-	} else if (!req.body.name || !items || items.length === 0) {
+	if (!name || !Array.isArray(items) || items.length === 0) {
 		res.sendStatus(400);
 	} else {
 		try {
@@ -96,7 +94,7 @@ const createGroceryList = async (req, res, next) => {
 const deleteGroceryList = async (req, res, next) => {
 	try {
 		const groceryList = await GroceryList.findOne({ where: { uuid: req.params.groceryListId } });
-		if (isAdmin(req) || req.user.uuid === groceryList.user_uuid) {
+		if (req.user.type === USER_TYPES.ADMIN || groceryList.isOwnedBy(req.user.uuid)) {
 			await groceryList.destroy();
 			res.sendStatus(200);
 		} else {

@@ -33,9 +33,7 @@ const getGroceryItemById = async (req, res, next) => {
 };
 
 const createGroceryItem = async (req, res, next) => {
-	if (!isShopper(req)) {
-		res.sendStatus(403);
-	} else if (!GroceryItem.hasRequiredFields(req.body)) {
+	if (!GroceryItem.hasRequiredFields(req.body)) {
 		res.sendStatus(400);
 	} else {
 		const { brand_uuid, product_uuid, upc } = req.body;
@@ -51,15 +49,11 @@ const createGroceryItem = async (req, res, next) => {
 };
 
 const deleteGroceryItem = async (req, res, next) => {
-	if (!isAdmin(req)) {
-		res.sendStatus(403);
-	} else {
-		try {
-			await GroceryItem.destroy({ where: { uuid: req.params.groceryItemId } });
-			res.sendStatus(200);
-		} catch (err) {
-			next(err);
-		}
+	try {
+		await GroceryItem.destroy({ where: { uuid: req.params.groceryItemId } });
+		res.sendStatus(200);
+	} catch (err) {
+		next(err);
 	}
 };
 

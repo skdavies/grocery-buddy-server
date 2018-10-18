@@ -29,6 +29,10 @@ export default class GroceryList extends Sequelize.Model {
 		);
 	}
 
+	isOwnedBy(uuid) {
+		return this.user.uuid === uuid;
+	}
+
 	static associate(models) {
 		this.belongsTo(models.User, {
 			as: 'user'

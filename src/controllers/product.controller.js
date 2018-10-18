@@ -27,9 +27,7 @@ const getProductById = async (req, res, next) => {
 };
 
 const updateProduct = async (req, res, next) => {
-	if (!isAdmin(req)) {
-		res.sendStatus(403);
-	} else if (!Product.hasRequiredFields(req.body)) {
+	if (!Product.hasRequiredFields(req.body)) {
 		res.sendStatus(400);
 	} else {
 		try {
@@ -45,9 +43,7 @@ const updateProduct = async (req, res, next) => {
 };
 
 const createProduct = async (req, res, next) => {
-	if (!isShopper(req)) {
-		res.sendStatus(403);
-	} else if (!Product.hasRequiredFields(req.body)) {
+	if (!Product.hasRequiredFields(req.body)) {
 		res.sendStatus(400);
 	} else {
 		try {
@@ -60,15 +56,11 @@ const createProduct = async (req, res, next) => {
 };
 
 const deleteProduct = async (req, res, next) => {
-	if (!isAdmin(req)) {
-		res.sendStatus(403);
-	} else {
-		try {
-			await Product.destroy({ where: { uuid: req.params.productId } });
-			res.sendStatus(200);
-		} catch (err) {
-			next(err);
-		}
+	try {
+		await Product.destroy({ where: { uuid: req.params.productId } });
+		res.sendStatus(200);
+	} catch (err) {
+		next(err);
 	}
 };
 

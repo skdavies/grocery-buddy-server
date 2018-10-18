@@ -16,18 +16,6 @@ export const serializeList = (list) => {
 	});
 };
 
-export const isAdmin = (req) => {
-	return req.user && req.user.type === USER_TYPES.ADMIN;
-};
-
-export const isAdminOrOwner = (req) => {
-	return req.user && (req.user.type === USER_TYPES.ADMIN || req.params.userId === req.user.uuid);
-};
-
-export const isShopper = (req) => {
-	return req.user && req.user.type === USER_TYPES.SHOPPER;
-};
-
 export const sequelizeErrorHandler = (err, req, res, next) => {
 	console.log(err);
 	// TODO ONE DAY THESE SHOULD BE LOGGED IN SOME WAY OTHER THAN CONSOLE
