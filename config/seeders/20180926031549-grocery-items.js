@@ -1,23 +1,23 @@
 'use strict';
-var fs = require('fs');
-var parse = require('csv-parse');
-var uuidv4 = require('uuid/v4');
+const fs = require('fs');
+const parse = require('csv-parse');
+const uuidv4 = require('uuid/v4');
 
 module.exports = {
-	up: (queryInterface, Sequelize) => {
-		var groceryItems = [];
-		var brands = [];
-		var products = [];
-		var brandUuids = {};
-		var productUuids = {};
-		return new Promise(function(resolve, reject) {
+	up: async (queryInterface, Sequelize) => {
+		let groceryItems = [];
+		let brands = [];
+		let products = [];
+		let brandUuids = {};
+		let productUuids = {};
+		await new Promise(function(resolve, reject) {
 			fs.createReadStream('config/static_data/products.csv')
 				.pipe(parse())
 				.on('data', function(row) {
 					if (row[0] !== 'grp_id') { // skip the first row
-						var upc = row[2];
-						var brand = row[3];
-						var product = row[4];
+						const upc = row[2];
+						let brand = row[3];
+						let product = row[4];
 
 						if (product.indexOf('-') !== -1) {
 							product = product.substring(0, product.indexOf('-')).trim();
@@ -29,7 +29,7 @@ module.exports = {
 							product = product.replace(brand, '');
 						}
 
-						var groceryItem = {
+						let groceryItem = {
 							upc
 						};
 
@@ -37,7 +37,7 @@ module.exports = {
 						if (productUuids[product]) {
 							groceryItem.product_uuid = productUuids[product];
 						} else {
-							var productUuid = uuidv4();
+							const productUuid = uuidv4();
 							products.push({
 								name: product,
 								uuid: productUuid
@@ -51,7 +51,7 @@ module.exports = {
 							if (brandUuids[brand]) {
 								groceryItem.brand_uuid = brandUuids[brand];
 							} else {
-								var brandUuid = uuidv4();
+								const brandUuid = uuidv4();
 								brands.push({
 									name: brand,
 									uuid: brandUuid
@@ -70,16 +70,15 @@ module.exports = {
 				.on('end', function() {
 					resolve(groceryItems);
 				});
-		}).then(function () {
-			return queryInterface.bulkInsert('brands', brands, {});
-		}).then(function () {
-			return queryInterface.bulkInsert('products', products, {});
-		}).then(function () {
-			return queryInterface.bulkInsert('grocery_items', groceryItems, {});
 		});
+		await queryInterface.bulkInsert('brands', brands, {});
+		await queryInterface.bulkInsert('products', products, {});
+		await queryInterface.bulkInsert('grocery_items', groceryItems, {});
 	},
 
-	down: (queryInterface, Sequelize) => {
-		return queryInterface.bulkDelete('brands', {});
+	down: async (queryInterface, Sequelize) => {
+		await queryInterface.bulkDelete('brands', {});
+		await queryInterface.bulkDelete('products', {});
+		await queryInterface.bulkDelete('grocery_items', {});
 	}
 };
