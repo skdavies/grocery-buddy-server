@@ -3,7 +3,7 @@ import path from 'path';
 
 const Sequelize = require('sequelize');
 const basename = path.basename(module.filename);
-const env = process.env.GB_ENV || 'local';
+const env = process.env.GB_ENV || 'development';
 const config = require(__dirname + '/../../config/config.js')[env];
 let db = {};
 
