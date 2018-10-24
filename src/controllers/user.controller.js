@@ -1,6 +1,5 @@
 import models from '../models/index.js';
-import { genericUpdateSuccessResponse, signToken, serializeList, isAdminOrOwner } from '../utils/utils.js';
-import { isAdmin } from '../utils/utils';
+import { genericUpdateSuccessResponse, signToken, serializeList } from '../utils/utils.js';
 
 const { User } = models;
 

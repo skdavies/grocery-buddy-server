@@ -11,6 +11,7 @@ module.exports = {
 				type: Sequelize.UUID,
 				defaultValue: Sequelize.literal('uuid_generate_v4()'),
 				allowNull: false,
+				unique: false,
 				primaryKey: true
 			},
 			upc: {
@@ -30,6 +31,7 @@ module.exports = {
 			brand_uuid: {
 				type: Sequelize.UUID,
 				onDelete: 'CASCADE',
+				onUpdate: 'CASCADE',
 				references: {
 					model: 'brands',
 					key: 'uuid'
@@ -39,6 +41,7 @@ module.exports = {
 				type: Sequelize.UUID,
 				allowNull: false,
 				onDelete: 'CASCADE',
+				onUpdate: 'CASCADE',
 				references: {
 					model: 'products',
 					key: 'uuid'

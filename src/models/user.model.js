@@ -26,7 +26,13 @@ export default class User extends Sequelize.Model {
 			},
 			password: {
 				type: DataTypes.STRING,
-				allowNull: false
+				allowNull: false,
+				validate: {
+					len: {
+						args: [8, 24],
+						msg: VALIDATION_ERRORS.LENGTH_OUT_OF_BOUNDS(8, 24)
+					}
+				}
 			},
 			type: {
 				type: DataTypes.ENUM(...Object.keys(USER_TYPES)),

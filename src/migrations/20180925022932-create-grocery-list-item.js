@@ -30,6 +30,8 @@ module.exports = {
 			grocery_item_uuid: {
 				allowNull: false,
 				type: Sequelize.UUID,
+				onDelete: 'CASCADE',
+				onUpdate: 'CASCADE',
 				references: {
 					model: 'grocery_items',
 					key: 'uuid'
@@ -38,6 +40,8 @@ module.exports = {
 			grocery_list_uuid: {
 				allowNull: false,
 				type: Sequelize.UUID,
+				onDelete: 'CASCADE',
+				onUpdate: 'CASCADE',
 				references: {
 					model: 'grocery_lists',
 					key: 'uuid'

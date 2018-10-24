@@ -1,5 +1,5 @@
 import models from '../models/index.js';
-import { genericUpdateSuccessResponse, serializeList, isAdmin, isAdminOrOwner, isShopper } from '../utils/utils.js';
+import { serializeList } from '../utils/utils.js';
 import { USER_TYPES } from '../constants/types';
 
 const { GroceryList, GroceryListItem } = models;
@@ -68,7 +68,7 @@ const updateGroceryList = async (req, res, next) => {
 };
 
 const createGroceryList = async (req, res, next) => {
-	let { items } = req.body;
+	let { items, name } = req.body;
 	if (!name || !Array.isArray(items) || items.length === 0) {
 		res.sendStatus(400);
 	} else {

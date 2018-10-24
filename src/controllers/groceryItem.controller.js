@@ -1,5 +1,4 @@
 import models from '../models/index.js';
-import { isAdmin, isShopper } from '../utils/utils';
 
 const { GroceryItem, Product, Brand } = models;
 

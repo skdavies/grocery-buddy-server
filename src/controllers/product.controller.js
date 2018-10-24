@@ -1,6 +1,5 @@
 import models from '../models/index.js';
 import { genericUpdateSuccessResponse } from '../utils/utils.js';
-import { isAdmin, isShopper } from '../utils/utils';
 
 const { Product } = models;
 

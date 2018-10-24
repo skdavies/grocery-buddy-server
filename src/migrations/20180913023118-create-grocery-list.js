@@ -6,6 +6,7 @@ module.exports = {
 				type: Sequelize.UUID,
 				defaultValue: Sequelize.literal('uuid_generate_v4()'),
 				allowNull: false,
+				unique: true,
 				primaryKey: true
 			},
 			id: {
@@ -31,6 +32,7 @@ module.exports = {
 				allowNull: false,
 				type: Sequelize.UUID,
 				onDelete: 'CASCADE',
+				onUpdate: 'CASCADE',
 				references: {
 					model: 'users',
 					key: 'uuid'

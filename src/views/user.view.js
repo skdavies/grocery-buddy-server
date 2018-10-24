@@ -24,7 +24,7 @@ router.put('/:userId', passport.authenticate('jwt', { session: false }), isAdmin
 router.delete('/:userId', passport.authenticate('jwt', { session: false }), isAdmin,
 	userController.deleteUser);
 
-router.put('/:userId/grocery-lists', passport.authenticate('jwt', { session: false }), isAdminOrOwner,
+router.get('/:userId/grocery-lists', passport.authenticate('jwt', { session: false }), isAdminOrOwner,
 	groceryListController.getGroceryListsByUser);
 
 export default router;

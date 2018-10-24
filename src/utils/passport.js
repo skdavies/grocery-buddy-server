@@ -3,7 +3,7 @@ import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
 import { Strategy as JWTStrategy, ExtractJwt } from 'passport-jwt';
 import bcrypt from 'bcrypt';
-import { INVALID_LOGIN, VALIDATION_ERRORS } from '../constants/errorConstants';
+import { INVALID_LOGIN } from '../constants/errorConstants';
 import models from '../models/index.js';
 
 const { User } = models;
@@ -23,12 +23,8 @@ const loginStrategy = async (username, password, done) => {
 
 const registerStrategy = async (username, password, done) => {
 	try {
-		if (password.length >= 8 && password.length <= 24) {
-			let user = await User.create({ password, username });
-			return done(null, user);
-		} else {
-			return done(null, false, { message: VALIDATION_ERRORS.LENGTH_OUT_OF_BOUNDS(8, 24) });
-		}
+		let user = await User.create({ password, username });
+		return done(null, user);
 	} catch (err) {
 		return done(err);
 	}
